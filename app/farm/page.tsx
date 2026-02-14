@@ -179,9 +179,15 @@ export default function FarmTwinPage() {
                 rowSpan: grid.rowSpan || 1,
                 colSpan: grid.colSpan || 1
               },
-              structure: b.cropType?.toLowerCase().includes('barn') ? 'barn' :
-                b.cropType?.toLowerCase().includes('house') ? 'house' :
-                  b.cropType?.toLowerCase().includes('greenhouse') ? 'greenhouse' : 'field',
+              structure: (function () {
+                const combined = (b.name + " " + (b.cropType || "")).toLowerCase();
+                if (combined.includes('house') || combined.includes('home') || combined.includes('villa') || combined.includes('cottage') || combined.includes('office')) return 'house';
+                if (combined.includes('barn') || combined.includes('shed') || combined.includes('stable') || combined.includes('cow') || combined.includes('cattle') || combined.includes('livestock') || combined.includes('poultry') || combined.includes('chicken')) return 'barn';
+                if (combined.includes('greenhouse') || combined.includes('nursery') || combined.includes('tunnel')) return 'greenhouse';
+                if (combined.includes('water') || combined.includes('tank') || combined.includes('pump') || combined.includes('well') || combined.includes('irrigation')) return 'irrigation';
+                if (combined.includes('storage') || combined.includes('silo') || combined.includes('warehouse') || combined.includes('garage') || combined.includes('store')) return 'storage';
+                return 'field';
+              })(),
               sensorData: b.readings?.[0] ? {
                 soilMoisture: b.readings[0].moisture || 0,
                 temperature: b.readings[0].temp || 0,

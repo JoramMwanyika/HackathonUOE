@@ -63,20 +63,34 @@ const FarmBlock3D = ({ position, size, color, type, label, subLabel, progress, o
             case "house":
                 return (
                     <group position={[0, size[1], 0]}>
-                        {/* Modern House Body */}
+                        {/* Main Body - White/Cream */}
                         <mesh position={[0, 0.4, 0]}>
-                            <boxGeometry args={[size[0] * 0.7, 0.8, size[2] * 0.5]} />
-                            <meshStandardMaterial color="#e2e8f0" />
+                            <boxGeometry args={[size[0] * 0.7, 0.8, size[2] * 0.6]} />
+                            <meshStandardMaterial color="#f1f5f9" />
                         </mesh>
-                        {/* Roof */}
-                        <mesh position={[0, 0.8 + 0.3, 0]} rotation={[0, Math.PI / 4, 0]}>
-                            <coneGeometry args={[size[0] * 0.6, 0.6, 4]} />
-                            <meshStandardMaterial color="#3b82f6" />
+
+                        {/* Roof - Dark Blue/Slate */}
+                        <mesh position={[0, 0.8 + 0.25, 0]}>
+                            <cylinderGeometry args={[0, size[0] * 0.55, 0.5, 4]} rotation={[0, Math.PI / 4, 0]} />
+                            <meshStandardMaterial color="#1e293b" />
                         </mesh>
-                        {/* Door/Window accents */}
-                        <mesh position={[0, 0.3, size[2] * 0.26]}>
-                            <boxGeometry args={[0.3, 0.5, 0.05]} />
-                            <meshStandardMaterial color="#cbd5e1" />
+
+                        {/* Door */}
+                        <mesh position={[0, 0.25, size[2] * 0.3 + 0.01]}>
+                            <planeGeometry args={[0.25, 0.5]} />
+                            <meshStandardMaterial color="#78350f" />
+                        </mesh>
+
+                        {/* Window Left */}
+                        <mesh position={[-0.4, 0.4, size[2] * 0.3 + 0.01]}>
+                            <planeGeometry args={[0.25, 0.25]} />
+                            <meshStandardMaterial color="#38bdf8" emissive="#38bdf8" emissiveIntensity={0.5} />
+                        </mesh>
+
+                        {/* Window Right */}
+                        <mesh position={[0.4, 0.4, size[2] * 0.3 + 0.01]}>
+                            <planeGeometry args={[0.25, 0.25]} />
+                            <meshStandardMaterial color="#38bdf8" emissive="#38bdf8" emissiveIntensity={0.5} />
                         </mesh>
                     </group>
                 );
@@ -171,7 +185,8 @@ const FarmBlock3D = ({ position, size, color, type, label, subLabel, progress, o
         if (type !== 'field') return null;
         if (!subLabel || subLabel === "Unknown" || subLabel === "None") return null;
 
-        const lowerLabel = subLabel.toLowerCase();
+        // Check both subLabel (crop) and label (block name)
+        const lowerLabel = (subLabel + " " + label).toLowerCase();
 
         // 1. MAIZE / CORN (Tall cylinders + leaves)
         if (lowerLabel.includes('maize') || lowerLabel.includes('corn')) {
