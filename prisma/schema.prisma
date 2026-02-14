@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String        @id @default(cuid())
+  name          String?
+  email         String?       @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          String        @default("farmer")
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  chatSessions  ChatSession[]
+  farms         Farm[]
+  payments      Payment[]
+  marketAccessExpiry DateTime?
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+  userId        String
+  amount        Float
+  currency      String   @default("KES")
+  status        String   @default("PENDING") // PENDING, COMPLETED, FAILED
+  reference     String?  // PayHero Reference / CheckoutRequestID
+  externalId    String?  // M-Pesa Receipt Number
+  phoneNumber   String?
+  description   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Farm {
+  id        String   @id @default(cuid())
+  name      String
+  location  String?
+  size      Float?
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  blocks    Block[]
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Block {
+  id          String          @id @default(cuid())
+  name        String
+  cropType    String?
+  area        Float?
+  farmId      String
+  status      String          @default("active")
+  plantedDate DateTime?
+  harvestDate DateTime?
+  gridConfig  Json?
+  farm        Farm            @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  sensors     Sensor[]
+  readings    SensorReading[]
+}
+
+model Sensor {
+  id       String          @id @default(cuid())
+  name     String
+  type     String
+  blockId  String
+  status   String          @default("active")
+  lastSeen DateTime        @default(now())
+  block    Block           @relation(fields: [blockId], references: [id], onDelete: Cascade)
+  readings SensorReading[]
+}
+
+model SensorReading {
+  id         Int      @id @default(autoincrement())
+  sensorId   String
+  blockId    String?
+  value      Float?
+  unit       String?
+  data       Json?
+  moisture   Float?
+  temp       Float?
+  humidity   Float?
+  nitrogen   Float?
+  phosphorus Float?
+  potassium  Float?
+  timestamp  DateTime @default(now())
+  block      Block?   @relation(fields: [blockId], references: [id])
+  sensor     Sensor   @relation(fields: [sensorId], references: [id], onDelete: Cascade)
+}
+
+model ChatSession {
+  id        String        @id @default(cuid())
+  userId    String
+  title     String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  messages  ChatMessage[]
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ChatMessage {
+  id            String      @id @default(cuid())
+  sessionId     String
+  role          String
+  content       String
+  language      String?
+  imageAnalysis Json?
+  actions       Json?
+  createdAt     DateTime    @default(now())
+  session       ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+}
