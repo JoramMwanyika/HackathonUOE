@@ -60,8 +60,8 @@ AgriVoice is built around **natural voice conversation**. Farmers simply speak t
 - **Progressive Web App** - Works offline, installable on any device
 
 ### Team Members
-- **Kalanza Victor** - [@Kalanza](https://github.com/Kalanza)
-- **Lewis Machabe** - [@1239sachet](https://github.com/1249sachet)
+- **Brian Kipruto** - [@Brian44ki](https://github.com/Brian44ki)
+- **Vidija Dan** - [@1239sachet](https://github.com/1249sachet)
 - **Joram Mwanyika** - [@JoramMwanyika](https://github.com/JoramMwanyika)
 
 ### Links
@@ -742,22 +742,5 @@ For questions or support:
 - Open an [issue](https://github.com/JoramMwanyika/My-Farm-Twin/issues)
 - Contact team members via GitHub
 
----
-
-## 🎯 Hackathon Submission Reminder
-
-**Submit your project here:** [https://github.com/armely/Hackathon/issues](https://github.com/armely/Hackathon/issues)
-
-**Submission Checklist:**
-- [ ] Upload project demo video to YouTube
-- [ ] Fill out submission form with:
-  - [ ] Project description
-  - [ ] Repository URL: `https://github.com/JoramMwanyika/My-Farm-Twin`
-  - [ ] Demo video URL
-  - [ ] Team members: Kalanza Victor, Lewis Machabe (1239sachet), Joram Mwanyika (JoramMwanyika)
-- [ ] Verify all links work correctly
-- [ ] Submit before deadline
-
----
 
 **Made with ❤️ for smallholder farmers across Africa** 🌾🌍

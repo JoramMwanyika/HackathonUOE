@@ -259,8 +259,8 @@ const MissionVisionValues = () => {
 const Team = () => {
   const team = [
     { name: "Joram Mwanyika", role: "Team Lead", color: "bg-blue-600" },
-    { name: "Lewis Machabe", role: "Frontend Developer", color: "bg-indigo-600" },
-    { name: "Victor Kalanza", role: "Backend Developer", color: "bg-violet-600" },
+    { name: "Vidija Dan", role: "Frontend Developer/UI Designer", color: "bg-indigo-600" },
+    { name: "Brian Kipruto", role: "Backend Developer", color: "bg-violet-600" },
   ];
 
   return (
