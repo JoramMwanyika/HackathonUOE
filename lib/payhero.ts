@@ -1,9 +1,9 @@
 import { db } from "./db";
 
 const PAYHERO_API_URL = "https://backend.payhero.co.ke/api/v2";
-const PAYHERO_USERNAME = process.env.PAYHERO_USERNAME;
-const PAYHERO_PASSWORD = process.env.PAYHERO_PASSWORD;
-const CALLBACK_URL = process.env.PAYHERO_CALLBACK_URL; // Must be public URL
+const PAYHERO_API_TOKEN = process.env.PAYHERO_API_TOKEN;
+const CALLBACK_URL = process.env.PAYHERO_CALLBACK_URL;
+const PAYHERO_CHANNEL_ID = parseInt(process.env.PAYHERO_CHANNEL_ID || "4639");
 
 export async function initiateSTKPush({
     phone,
@@ -14,29 +14,26 @@ export async function initiateSTKPush({
     amount: number;
     userId: string;
 }) {
-    if (!PAYHERO_USERNAME || !PAYHERO_PASSWORD) {
-        throw new Error("PayHero credentials missing");
+    if (!PAYHERO_API_TOKEN) {
+        throw new Error("PayHero API Token missing");
     }
 
-    // 1. Get Basic Auth Token
-    const auth = Buffer.from(`${PAYHERO_USERNAME}:${PAYHERO_PASSWORD}`).toString("base64");
-
-    // 2. Prepare Request
+    // Prepare Request
     const body = {
         amount,
         phone_number: phone,
-        channel_id: 2855, // 2855 is common PayHero Test Channel / Default. Check docs for specific channel ID.
+        channel_id: PAYHERO_CHANNEL_ID,
         provider: "m-pesa",
-        external_reference: userId, // Pass userId as reference to track
+        external_reference: userId,
         callback_url: CALLBACK_URL,
     };
 
     try {
-        const response = await fetch(`${PAYHERO_API_URL}/services/winter/stk/initiate`, {
+        const response = await fetch(`${PAYHERO_API_URL}/payments`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Basic ${auth}`,
+                Authorization: `Basic ${PAYHERO_API_TOKEN}`,
             },
             body: JSON.stringify(body),
         });
@@ -44,7 +41,12 @@ export async function initiateSTKPush({
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.message || "Failed to initiate STK Push");
+            console.error("PayHero API Error:", {
+                status: response.status,
+                statusText: response.statusText,
+                data
+            });
+            throw new Error(data.message || `Failed to initiate STK Push: ${response.status} ${JSON.stringify(data)}`);
         }
 
         // 3. Create Pending Payment Record
