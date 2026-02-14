@@ -22,6 +22,7 @@ model User {
   farms         Farm[]
   payments      Payment[]
   marketAccessExpiry DateTime?
+  listings      MarketListing[]
 }
 
 model Payment {
@@ -115,4 +116,19 @@ model ChatMessage {
   actions       Json?
   createdAt     DateTime    @default(now())
   session       ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+}
+
+model MarketListing {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  price       Float
+  quantity    String
+  location    String
+  imageUrl    String?
+  sellerId    String
+  status      String   @default("ACTIVE") // ACTIVE, SOLD
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  seller      User     @relation(fields: [sellerId], references: [id], onDelete: Cascade)
 }

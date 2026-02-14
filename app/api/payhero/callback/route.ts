@@ -24,12 +24,6 @@ export async function POST(req: Request) {
             const userId = data.external_reference;
 
             // Update Payment Record
-            // Find by reference (checkoutId) or creating if not found (safer to update)
-            // Since we created it in init, update is best.
-
-            // We need to find the pending payment for this User/Ref
-            // Ideally we used checkoutId as reference.
-
             await db.payment.updateMany({
                 where: { reference: checkoutId },
                 data: {
@@ -43,6 +37,8 @@ export async function POST(req: Request) {
                 // Add 24 hours access
                 const expiry = new Date();
                 expiry.setHours(expiry.getHours() + 24);
+
+                console.log(`Granting access to user ${userId} until ${expiry}`);
 
                 await db.user.update({
                     where: { id: userId },
