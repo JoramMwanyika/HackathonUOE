@@ -1,13 +1,14 @@
-import { auth } from '@/auth';
+import NextAuth from 'next-auth';
+import { authConfig } from './auth.config';
 import { NextResponse } from 'next/server';
- 
-export default auth((req) => {
+
+export default NextAuth(authConfig).auth((req) => {
   const isLoggedIn = !!req.auth;
   const isOnDashboard = req.nextUrl.pathname.startsWith('/farm') ||
-                       req.nextUrl.pathname.startsWith('/advisor') ||
-                       req.nextUrl.pathname.startsWith('/alerts') ||
-                       req.nextUrl.pathname.startsWith('/profile') ||
-                       req.nextUrl.pathname.startsWith('/dashboard');
+    req.nextUrl.pathname.startsWith('/advisor') ||
+    req.nextUrl.pathname.startsWith('/alerts') ||
+    req.nextUrl.pathname.startsWith('/profile') ||
+    req.nextUrl.pathname.startsWith('/dashboard');
 
   if (isOnDashboard && !isLoggedIn) {
     return NextResponse.redirect(new URL('/login', req.url));
