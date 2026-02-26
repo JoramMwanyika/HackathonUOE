@@ -9,35 +9,35 @@ datasource db {
 }
 
 model User {
-  id            String        @id @default(cuid())
-  name          String?
-  email         String?       @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          String        @default("farmer")
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  chatSessions  ChatSession[]
-  farms         Farm[]
-  payments      Payment[]
+  id                 String          @id @default(cuid())
+  name               String?
+  email              String?         @unique
+  emailVerified      DateTime?
+  image              String?
+  password           String?
+  role               String          @default("farmer")
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
   marketAccessExpiry DateTime?
-  listings      MarketListing[]
+  chatSessions       ChatSession[]
+  farms              Farm[]
+  listings           MarketListing[]
+  payments           Payment[]
 }
 
 model Payment {
-  id            String   @id @default(cuid())
-  userId        String
-  amount        Float
-  currency      String   @default("KES")
-  status        String   @default("PENDING") // PENDING, COMPLETED, FAILED
-  reference     String?  // PayHero Reference / CheckoutRequestID
-  externalId    String?  // M-Pesa Receipt Number
-  phoneNumber   String?
-  description   String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String   @id @default(cuid())
+  userId      String
+  amount      Float
+  currency    String   @default("KES")
+  status      String   @default("PENDING")
+  reference   String?
+  externalId  String?
+  phoneNumber String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Farm {
@@ -127,7 +127,7 @@ model MarketListing {
   location    String
   imageUrl    String?
   sellerId    String
-  status      String   @default("ACTIVE") // ACTIVE, SOLD
+  status      String   @default("ACTIVE")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   seller      User     @relation(fields: [sellerId], references: [id], onDelete: Cascade)

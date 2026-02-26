@@ -8,7 +8,9 @@ export default NextAuth(authConfig).auth((req) => {
     req.nextUrl.pathname.startsWith('/advisor') ||
     req.nextUrl.pathname.startsWith('/alerts') ||
     req.nextUrl.pathname.startsWith('/profile') ||
-    req.nextUrl.pathname.startsWith('/dashboard');
+    req.nextUrl.pathname.startsWith('/dashboard') ||
+    req.nextUrl.pathname.startsWith('/scan') ||
+    req.nextUrl.pathname.startsWith('/tasks');
 
   if (isOnDashboard && !isLoggedIn) {
     return NextResponse.redirect(new URL('/login', req.url));

@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData()
     const imageFile = formData.get("image") as File
+    const language = (formData.get("language") as string) || "en"
 
     if (!imageFile) {
       return NextResponse.json({ error: "No image provided" }, { status: 400 })
@@ -59,10 +60,13 @@ Based on this information:
 1. Identify if this appears to be a plant/crop image
 2. If it's a plant, identify any visible diseases, pests, nutrient deficiencies, or health issues
 3. Provide the likely disease/condition name
-4. Rate the severity (Mild, Moderate, Severe)
+4. Rate the severity (Mild, Moderate, Severe, or Healthy)
 5. List key symptoms visible
+6. Provide an actionable recommendation on what to do next (TREATMENT).
 
-Respond in this JSON format:
+VERY IMPORTANT: Translate your ENTIRE final JSON output (including the treatment and symptoms) into the language code: "${language}" if it is not "en". 
+
+Respond in this exact JSON format:
 {
   "isPlant": true/false,
   "plantType": "identified plant or crop type",
@@ -70,7 +74,8 @@ Respond in this JSON format:
   "severity": "Mild/Moderate/Severe/Healthy",
   "symptoms": ["symptom 1", "symptom 2"],
   "confidence": "High/Medium/Low",
-  "summary": "Brief 1-2 sentence summary for farmer"
+  "summary": "Brief 1-2 sentence summary for farmer",
+  "treatment": "Actionable recommendation or treatment plan that the farmer should do right now."
 }`
 
     const gptUrl = new URL(GPT_ENDPOINT)
@@ -108,6 +113,7 @@ Respond in this JSON format:
           symptoms: [],
           confidence: "Low",
           summary: caption,
+          treatment: "Unable to generate treatment plan."
         },
         rawVision: { caption, tags, denseCaptions },
       })

@@ -9,6 +9,7 @@ import { CreateListingModal } from "@/components/create-listing-modal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import Image from "next/image";
+import { Header } from "@/components/header";
 
 // Mock Market Data (Premium)
 const MARKET_DATA = [
@@ -57,23 +58,24 @@ export default function MarketPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-900 pb-20 p-4 md:p-8">
-            <div className="max-w-6xl mx-auto space-y-8">
+        <div className="min-h-screen bg-slate-50 font-sans pb-24">
+            <Header />
 
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <main className="container mx-auto px-4 max-w-7xl py-6 space-y-8">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-200 pb-4">
                     <div>
-                        <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Marketplace</h1>
-                        <p className="text-slate-400">Track prices & trade with other farmers.</p>
+                        <h1 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">Marketplace</h1>
+                        <p className="text-slate-500 font-medium">Track prices & trade with other farmers.</p>
                     </div>
                 </div>
 
                 <Tabs defaultValue="prices" className="w-full">
-                    <TabsList className="grid w-full grid-cols-2 bg-slate-800 border-slate-700">
-                        <TabsTrigger value="prices" className="data-[state=active]:bg-slate-700 data-[state=active]:text-white">
+                    <TabsList className="grid w-full grid-cols-2 bg-slate-200/50 p-1 rounded-xl">
+                        <TabsTrigger value="prices" className="data-[state=active]:bg-white data-[state=active]:text-slate-800 text-slate-500 rounded-lg py-2.5 font-bold shadow-sm transition-all">
                             <TrendingUp className="w-4 h-4 mr-2" />
                             Market Prices (Premium)
                         </TabsTrigger>
-                        <TabsTrigger value="trading" className="data-[state=active]:bg-slate-700 data-[state=active]:text-white">
+                        <TabsTrigger value="trading" className="data-[state=active]:bg-white data-[state=active]:text-slate-800 text-slate-500 rounded-lg py-2.5 font-bold shadow-sm transition-all">
                             <Store className="w-4 h-4 mr-2" />
                             Farmer Trading (Free)
                         </TabsTrigger>
@@ -83,44 +85,45 @@ export default function MarketPage() {
                     <TabsContent value="prices" className="space-y-6 mt-6">
                         <div className="relative">
                             {!hasAccess && (
-                                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 text-center">
-                                    <div className="bg-slate-800 p-4 rounded-full mb-4 shadow-xl">
+                                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/70 backdrop-blur-md rounded-[20px] border border-slate-200 p-6 text-center shadow-sm">
+                                    <div className="bg-yellow-50 p-4 rounded-full mb-4 shadow-sm border border-yellow-100">
                                         <Lock className="w-8 h-8 text-yellow-500" />
                                     </div>
-                                    <h2 className="text-xl font-bold text-white mb-2">Unlock Premium Market Insights</h2>
-                                    <p className="text-slate-300 mb-6 max-w-sm">
+                                    <h2 className="text-xl font-bold text-slate-800 mb-2">Unlock Premium Market Insights</h2>
+                                    <p className="text-slate-600 mb-6 max-w-sm font-medium">
                                         Get real-time prices, trends, and forecasts to sell at the best time.
                                     </p>
-                                    <Button
+                                    <button
                                         onClick={() => setIsPaymentModalOpen(true)}
-                                        className="bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold px-8 py-6 text-lg shadow-lg hover:shadow-yellow-500/20 transition-all"
+                                        className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-md transition-all text-lg"
                                     >
                                         Unlock for KES 10
-                                    </Button>
-                                    {/* Simulation Button Removed for Cleanliness, but logic remains if desired */}
+                                    </button>
                                 </div>
                             )}
 
-                            <div className={`grid gap-4 md:grid-cols-2 lg:grid-cols-3 ${!hasAccess ? 'filter blur-md select-none opacity-50' : ''}`}>
+                            <div className={`grid gap-6 md:grid-cols-2 lg:grid-cols-3 ${!hasAccess ? 'filter blur-md select-none opacity-50' : ''}`}>
                                 {MARKET_DATA.map((item, i) => (
-                                    <div key={i} className="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-lg relative overflow-hidden">
-                                        <div className="absolute top-0 right-0 p-3 opacity-10">
-                                            {item.trend === 'up' ? <TrendingUp size={48} /> : <TrendingDown size={48} />}
+                                    <div key={i} className="bg-white rounded-[20px] p-6 border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+                                        <div className="absolute top-0 right-0 p-4 opacity-5 text-slate-900 group-hover:opacity-10 transition-opacity">
+                                            {item.trend === 'up' ? <TrendingUp size={64} /> : <TrendingDown size={64} />}
                                         </div>
-                                        <div className="flex justify-between items-start mb-4">
+                                        <div className="flex justify-between items-start mb-6">
                                             <div>
-                                                <h3 className="text-slate-300 font-medium text-sm mb-1">{item.location}</h3>
-                                                <p className="text-white font-bold text-lg">{item.crop}</p>
+                                                <h3 className="text-slate-500 font-bold text-sm mb-1 uppercase tracking-wider">{item.location}</h3>
+                                                <p className="text-slate-800 font-bold text-xl">{item.crop}</p>
                                             </div>
-                                            <div className={`flex items-center gap-1 text-xs font-bold px-2 py-1 rounded ${item.trend === 'up' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
-                                                {item.trend === 'up' ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                                            <div className={`flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-md ${item.trend === 'up' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                                {item.trend === 'up' ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
                                                 {item.change > 0 ? '+' : ''}{item.change}
                                             </div>
                                         </div>
                                         <div className="flex items-end justify-between">
                                             <div>
-                                                <p className="text-slate-500 text-xs mb-0.5">Current Price</p>
-                                                <p className="text-2xl font-bold text-white">KES {item.price.toLocaleString()}</p>
+                                                <p className="text-slate-500 text-sm font-medium mb-1">Current Price</p>
+                                                <p className="text-3xl font-black text-slate-800 tracking-tight">
+                                                    KES {item.price.toLocaleString()}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -132,86 +135,92 @@ export default function MarketPage() {
 
                     {/* === TAB 2: FARMER TRADING === */}
                     <TabsContent value="trading" className="space-y-6 mt-6">
-                        <div className="flex justify-between items-center bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                        <div className="flex justify-between items-center bg-white p-6 rounded-[20px] border border-slate-200 shadow-sm">
                             <div>
-                                <h3 className="text-white font-bold text-lg">Buy & Sell Produce</h3>
-                                <p className="text-sm text-slate-400">Directly trade with other farmers.</p>
+                                <h3 className="text-slate-800 font-bold text-xl mb-1">Buy & Sell Produce</h3>
+                                <p className="text-slate-500 font-medium">Directly trade with other farmers.</p>
                             </div>
-                            <Button onClick={() => setIsListingModalOpen(true)} className="bg-green-600 hover:bg-green-700 text-white">
-                                <Store className="w-4 h-4 mr-2" />
+                            <button onClick={() => setIsListingModalOpen(true)} className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-xl flex items-center shadow-md shadow-green-500/20 transition-all">
+                                <Store className="w-5 h-5 mr-2" />
                                 Sell Produce
-                            </Button>
+                            </button>
                         </div>
 
                         {loadingListings ? (
-                            <div className="text-center py-20 text-slate-500">Loading listings...</div>
+                            <div className="text-center py-20 text-slate-500 font-medium">
+                                <div className="h-8 w-8 border-4 border-slate-200 border-t-green-500 rounded-full animate-spin mx-auto mb-4" />
+                                Loading listings...
+                            </div>
                         ) : listings.length === 0 ? (
-                            <div className="text-center py-20 bg-slate-800/30 rounded-xl border border-slate-700 border-dashed">
-                                <ShoppingCart className="w-12 h-12 text-slate-500 mx-auto mb-4 opacity-50" />
-                                <h3 className="text-white font-bold text-lg mb-2">No listings yet</h3>
-                                <p className="text-slate-400 mb-6">Be the first to create a listing!</p>
-                                <Button onClick={() => setIsListingModalOpen(true)} variant="outline" className="border-slate-600 text-slate-300">
+                            <div className="text-center py-20 bg-white rounded-[20px] border border-slate-200 border-dashed shadow-sm">
+                                <div className="bg-slate-50 h-20 w-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <ShoppingCart className="w-10 h-10 text-slate-300" />
+                                </div>
+                                <h3 className="text-slate-800 font-bold text-xl mb-2">No listings yet</h3>
+                                <p className="text-slate-500 mb-6 font-medium">Be the first to create a listing!</p>
+                                <Button onClick={() => setIsListingModalOpen(true)} variant="outline" className="border-slate-300 text-slate-600 font-bold rounded-xl">
                                     Start Selling
                                 </Button>
                             </div>
                         ) : (
                             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                                 {listings.map((listing) => (
-                                    <div key={listing.id} className="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 shadow-lg hover:border-slate-600 transition-all flex flex-col">
+                                    <div key={listing.id} className="bg-white rounded-[20px] overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col">
                                         {listing.imageUrl ? (
-                                            <div className="relative h-48 w-full bg-slate-900">
+                                            <div className="relative h-48 w-full bg-slate-100 border-b border-slate-100">
                                                 <Image
                                                     src={listing.imageUrl}
                                                     alt={listing.title}
                                                     fill
                                                     className="object-cover"
                                                     onError={(e) => {
-                                                        // Fallback if image fails
                                                         (e.target as HTMLImageElement).style.display = 'none';
                                                     }}
                                                 />
                                             </div>
                                         ) : (
-                                            <div className="h-48 bg-slate-700 flex items-center justify-center text-slate-500">
-                                                <Store className="w-12 h-12 opacity-20" />
+                                            <div className="h-48 bg-slate-50 flex items-center justify-center text-slate-300 border-b border-slate-100">
+                                                <Store className="w-12 h-12 opacity-50" />
                                             </div>
                                         )}
 
-                                        <div className="p-5 flex-1 flex flex-col">
-                                            <div className="flex justify-between items-start mb-2">
-                                                <h3 className="text-xl font-bold text-white line-clamp-1">{listing.title}</h3>
-                                                <div className="bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded text-xs font-bold whitespace-nowrap">
+                                        <div className="p-6 flex-1 flex flex-col">
+                                            <div className="flex justify-between items-start mb-3">
+                                                <h3 className="text-xl font-bold text-slate-800 line-clamp-1 pr-2">{listing.title}</h3>
+                                                <div className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap border border-blue-100">
                                                     {listing.quantity}
                                                 </div>
                                             </div>
 
-                                            <p className="text-slate-400 text-sm mb-4 line-clamp-2 flex-1">{listing.description}</p>
+                                            <p className="text-slate-600 font-medium text-sm mb-6 line-clamp-2 flex-1 leading-relaxed">
+                                                {listing.description}
+                                            </p>
 
-                                            <div className="space-y-3 mt-auto">
-                                                <div className="flex items-center justify-between text-sm">
-                                                    <div className="flex items-center text-slate-300">
-                                                        <MapPin className="w-3 h-3 mr-1 text-slate-500" />
+                                            <div className="space-y-4 mt-auto">
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center text-slate-500 font-semibold text-sm bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+                                                        <MapPin className="w-4 h-4 mr-1.5" />
                                                         {listing.location}
                                                     </div>
-                                                    <div className="text-green-400 font-bold text-lg">
+                                                    <div className="text-green-600 font-black text-xl tracking-tight">
                                                         KES {listing.price.toLocaleString()}
                                                     </div>
                                                 </div>
 
-                                                <div className="flex items-center justify-between pt-4 border-t border-slate-700">
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center overflow-hidden">
+                                                <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-200">
                                                             {listing.seller?.image ? (
-                                                                <Image src={listing.seller.image} alt={listing.seller.name || "User"} width={24} height={24} />
+                                                                <Image src={listing.seller.image} alt={listing.seller.name || "User"} width={32} height={32} />
                                                             ) : (
-                                                                <User className="w-3 h-3 text-slate-400" />
+                                                                <User className="w-4 h-4 text-slate-400" />
                                                             )}
                                                         </div>
-                                                        <span className="text-xs text-slate-400 truncate max-w-[100px]">
+                                                        <span className="text-sm font-bold text-slate-700 truncate max-w-[120px]">
                                                             {listing.seller?.name || "Farmer"}
                                                         </span>
                                                     </div>
-                                                    <Button size="sm" onClick={() => toast.success(`Contacting ${listing.seller?.name || 'Seller'}...`)}>
+                                                    <Button className="rounded-xl px-5" onClick={() => toast.success(`Contacting ${listing.seller?.name || 'Seller'}...`)}>
                                                         Contact
                                                     </Button>
                                                 </div>
@@ -224,7 +233,7 @@ export default function MarketPage() {
                     </TabsContent>
                 </Tabs>
 
-            </div>
+            </main>
 
             <PaymentModal
                 isOpen={isPaymentModalOpen}

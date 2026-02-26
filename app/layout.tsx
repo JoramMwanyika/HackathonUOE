@@ -3,6 +3,8 @@ import { DM_Sans, DM_Serif_Display } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "@/components/ui/sonner"
 import { AuthProvider } from "@/components/auth-provider"
+import { ChatProvider } from "@/components/chat-provider"
+import { ChatBotWidget } from "@/components/chat-bot-widget"
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -25,8 +27,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${dmSans.variable} ${dmSerif.variable}`}>
         <AuthProvider>
-          {children}
-          <Toaster />
+          <ChatProvider>
+            {children}
+            <ChatBotWidget />
+            <Toaster />
+          </ChatProvider>
         </AuthProvider>
       </body>
     </html>
